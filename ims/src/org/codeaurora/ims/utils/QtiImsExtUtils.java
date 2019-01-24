@@ -55,7 +55,7 @@ import org.codeaurora.ims.QtiImsExtManager;
  */
 public class QtiImsExtUtils {
 
-    private static String LOG_TAG = "QtiImsExtUtils";
+    private static final String LOG_TAG = "QtiImsExtUtils";
 
     public static final String QTI_IMS_CALL_DEFLECT_NUMBER =
             "ims_call_deflect_number";
@@ -520,8 +520,13 @@ public class QtiImsExtUtils {
 
     // Returns true if Carrier supports RTT
     public static boolean isRttSupported(int phoneId, Context context) {
-        return (isCarrierConfigEnabled(phoneId, context
-                , QtiCarrierConfigs.KEY_CARRIER_RTT_SUPPORTED));
+        boolean isRttSupported = false;
+        PersistableBundle b = getConfigForPhoneId(context, phoneId);
+        if (b != null) {
+            isRttSupported = b.getBoolean(
+                    CarrierConfigManager.KEY_RTT_SUPPORTED_BOOL);
+        }
+        return isRttSupported;
     }
 
     // Returns true if Carrier supports RTT auto upgrade
